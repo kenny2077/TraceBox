@@ -1,9 +1,6 @@
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/kenny2077/TraceBox/main/docs/logo-dark.svg">
-    <img alt="TraceBox" src="https://raw.githubusercontent.com/kenny2077/TraceBox/main/docs/logo-dark.svg" width="420">
-  </picture>
-</p>
+<div align="center">
+  <img alt="TraceBox" src="https://raw.githubusercontent.com/kenny2077/TraceBox/main/docs/logo-dark.svg" width="420">
+</div>
 
 <p align="center"><strong>Local black-box flight recorder for AI coding agents.</strong></p>
 
