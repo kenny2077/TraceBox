@@ -10,7 +10,6 @@
 <p align="center">See what your agent changed, what it risked, and how to undo it — all on your machine.</p>
 
 <p align="center">
-  <a href="https://pypi.org/project/tracebox/"><img src="https://img.shields.io/pypi/v/tracebox?color=blue" alt="PyPI version"></a>
   <a href="https://github.com/kenny2077/TraceBox/actions"><img src="https://img.shields.io/github/actions/workflow/status/kenny2077/TraceBox/ci.yml?branch=main" alt="CI status"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue" alt="Python versions"></a>

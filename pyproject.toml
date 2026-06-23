@@ -1,5 +1,5 @@
 [project]
-name = "tracebox"
+name = "TraceBox"
 version = "1.0.0"
 description = "TraceBox — Local black-box recorder for AI coding agents. See what your agent changed, what it risked, and how to undo it."
 readme = "README.md"
