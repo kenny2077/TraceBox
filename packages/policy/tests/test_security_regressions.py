@@ -366,8 +366,6 @@ class TestApprovalMemorySafety:
         # Current code uses f"{rule_id}:{tool_name}" which is too broad
         rule_id = "ask-shell"
         tool_name = "execute_command"
-        args1 = {"command": "ls /tmp"}
-        args2 = {"command": "rm -rf /"}
 
         # Current (vulnerable) memory key:
         memory_key_old = f"{rule_id}:{tool_name}"

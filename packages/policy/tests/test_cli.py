@@ -63,7 +63,6 @@ def test_init_unknown_template():
 @pytest.mark.skip(reason="Click runner filesystem isolation conflicts with absolute tmp_path")
 def test_export_json(tmp_path):
     """Export a session as JSON."""
-    import os
     session_id = "test_export"
     log_dir = str(tmp_path)
     log_file = os.path.join(log_dir, f"session_{session_id}.jsonl")
@@ -77,7 +76,6 @@ def test_export_json(tmp_path):
 @pytest.mark.skip(reason="Click runner filesystem isolation conflicts with absolute tmp_path")
 def test_export_csv(tmp_path):
     """Export a session as CSV."""
-    import os
     session_id = "test_export_csv"
     log_dir = str(tmp_path)
     log_file = os.path.join(log_dir, f"session_{session_id}.jsonl")

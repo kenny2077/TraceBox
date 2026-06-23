@@ -62,7 +62,7 @@ class FileRecorder:
         for line in status.split("\n"):
             if not line:
                 continue
-            status_code = line[:2]
+            line[:2]
             path = line[3:].strip()
             if path:
                 full_path = self.repo_path / path

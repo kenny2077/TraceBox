@@ -94,10 +94,6 @@ class FileWatcher:
         self.observer = Observer()
         
         # Watch the repo, but ignore common non-source directories
-        ignore_patterns = [
-            '.git', 'node_modules', '.tracebox', '__pycache__', 
-            '.venv', 'venv', 'dist', '.next', '.cache'
-        ]
         
         self.observer.schedule(self.handler, str(self.repo_path), recursive=True)
         self.observer.start()

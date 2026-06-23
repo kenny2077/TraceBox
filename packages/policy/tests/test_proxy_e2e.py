@@ -53,7 +53,6 @@ rules:
     # so we will use subprocess to run the tracegate CLI instead.
 
     import subprocess
-    import json
     
     # Run the proxy via subprocess
     proxy_cmd = ["python", "-m", "tracegate.cli", "proxy", "--policy", str(policy_path), "--log-dir", str(log_dir), "--", "python", str(server_path)]

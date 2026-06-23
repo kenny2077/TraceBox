@@ -46,4 +46,4 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install pyright
-      - run: pyright packages/ --ignoreexternal || true
+      - run: pyright packages/ || true

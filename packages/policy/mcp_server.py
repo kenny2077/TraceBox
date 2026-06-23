@@ -99,7 +99,7 @@ class TraceBoxMCPServer:
                 result_future.set_result({
                     "jsonrpc": "2.0",
                     "id": request_id,
-                    "content": [{"type": "text", "text": f"❌ TraceBox: User denied this action"}],
+                    "content": [{"type": "text", "text": "❌ TraceBox: User denied this action"}],
                     "isError": True,
                 })
                 return {
@@ -152,11 +152,11 @@ class TraceBoxMCPServer:
             logger.warning(f"Approval prompt unavailable: {e}")
             # Fallback: print to console, read /dev/tty
             print(f"\n{'='*60}")
-            print(f"  ⚠️  TraceBox: Ask for approval")
+            print("  ⚠️  TraceBox: Ask for approval")
             print(f"  Tool: {tool_name}")
             print(f"  Reason: {reason}")
             print(f"{'='*60}")
-            print(f"\n  Allow? (y=once, a=always, n=no, N=never) ", end="", flush=True)
+            print("\n  Allow? (y=once, a=always, n=no, N=never) ", end="", flush=True)
             try:
                 with open("/dev/tty", "r") as tty:
                     response = tty.readline().strip().lower()

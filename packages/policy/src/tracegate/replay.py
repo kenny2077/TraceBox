@@ -136,7 +136,7 @@ def _render_event(event_type: str, payload: dict, timestamp: str):
         if error:
             console.print(f"  [red]↳ Error:[/] {error}")
         else:
-            console.print(f"  [green]↳ Success[/]")
+            console.print("  [green]↳ Success[/]")
 
     elif event_type == "request_duration":
         ms = payload.get("duration_ms", "?")

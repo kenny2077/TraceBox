@@ -295,6 +295,7 @@ def export(
     """
     import csv
     import io
+    import json
     from rich.console import Console
     console = Console()
     

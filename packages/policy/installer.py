@@ -44,7 +44,7 @@ def install_for_claude(repo_path: str) -> bool:
     with open(settings_path, "w") as f:
         json.dump(settings, f, indent=2)
 
-    print(f"  ✅ Claude Code: TraceBox MCP server installed")
+    print("  ✅ Claude Code: TraceBox MCP server installed")
     print(f"     Config: {settings_path}")
     return True
 
@@ -52,7 +52,7 @@ def install_for_claude(repo_path: str) -> bool:
 def install_for_codex(repo_path: str) -> bool:
     """Install TraceBox hook for OpenAI Codex."""
     codex_dir = Path.home() / ".codex"
-    hooks_dir = codex_dir / "hooks"
+    codex_dir / "hooks"
 
     # Codex supports pre-tool hooks via AGENTS.md
     agents_md_path = Path(repo_path) / "AGENTS.md"
@@ -73,7 +73,7 @@ This session is being recorded by TraceBox. Before every tool call:
 
     # Write AGENTS.md for Codex
     agents_md_path.write_text(tracebox_prompt.lstrip())
-    print(f"  ✅ Codex: AGENTS.md hook installed")
+    print("  ✅ Codex: AGENTS.md hook installed")
     print(f"     Config: {agents_md_path}")
     return True
 
@@ -104,7 +104,7 @@ def install_for_cursor(repo_path: str) -> bool:
     with open(settings_path, "w") as f:
         json.dump(settings, f, indent=2)
 
-    print(f"  ✅ Cursor: TraceBox MCP server installed")
+    print("  ✅ Cursor: TraceBox MCP server installed")
     print(f"     Config: {settings_path}")
     return True
 
@@ -168,14 +168,14 @@ def uninstall_all(repo_path: str, agents: Optional[list] = None) -> dict:
             settings.get("mcpServers", {}).pop("tracebox", None)
             with open(claude_settings, "w") as f:
                 json.dump(settings, f, indent=2)
-            print(f"  ✅ Claude Code: TraceBox removed")
+            print("  ✅ Claude Code: TraceBox removed")
             results["claude"] = True
 
     if "codex" in agents:
         agents_md = Path(repo_path) / "AGENTS.md"
         if agents_md.exists():
             agents_md.unlink()
-            print(f"  ✅ Codex: AGENTS.md removed")
+            print("  ✅ Codex: AGENTS.md removed")
             results["codex"] = True
 
     if "cursor" in agents:
@@ -186,7 +186,7 @@ def uninstall_all(repo_path: str, agents: Optional[list] = None) -> dict:
             settings.get("mcpServers", {}).pop("tracebox", None)
             with open(cursor_settings, "w") as f:
                 json.dump(settings, f, indent=2)
-            print(f"  ✅ Cursor: TraceBox removed")
+            print("  ✅ Cursor: TraceBox removed")
             results["cursor"] = True
 
     return results

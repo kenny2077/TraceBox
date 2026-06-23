@@ -1,3 +1,4 @@
+import logging
 import os
 import json
 from pathlib import Path
@@ -18,6 +19,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+logger = logging.getLogger(__name__)
 
 DEFAULT_LOG_DIR = os.path.join(Path.home(), ".tracegate", "sessions")
 
@@ -66,7 +69,7 @@ def get_sessions(log_dir: str = DEFAULT_LOG_DIR):
                     event_count=row["event_count"] or 0,
                     first_timestamp=row["start_time"]
                 ))
-    except Exception as e:
+    except Exception:
         # Fallback to empty list on error
         pass
         

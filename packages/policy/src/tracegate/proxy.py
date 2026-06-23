@@ -1,10 +1,18 @@
+from __future__ import annotations
+
 import asyncio
 import signal
 import sys
 import os
 import logging
 import json
-from typing import List, Optional
+from typing import TYPE_CHECKING, List, Optional
+
+if TYPE_CHECKING:
+    from tracegate.audit import AuditLogger
+    from tracegate.policy import PolicyEngine, SessionState
+    from tracegate.risk import RiskClassifier
+    from tracegate.dlp import RedactionEngine
 
 logger = logging.getLogger(__name__)
 

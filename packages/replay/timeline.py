@@ -52,7 +52,7 @@ class TimelineUI:
 
         lines = [
             f"{'=' * 70}",
-            f"  TraceBox Session Timeline",
+            "  TraceBox Session Timeline",
             f"{'=' * 70}",
             f"  Session: {session['id']}",
             f"  Agent:   {session['agent_name']}",
@@ -112,7 +112,7 @@ class TimelineUI:
 
         lines = [
             f"{'=' * 50}",
-            f"  Session Summary",
+            "  Session Summary",
             f"{'=' * 50}",
             f"  ID:            {summary['id']}",
             f"  Agent:         {summary['agent_name']}",

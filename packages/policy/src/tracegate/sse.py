@@ -1,8 +1,13 @@
+from __future__ import annotations
+
 import asyncio
 import json
 import logging
 import sys
-from typing import Optional, Dict, Any
+from typing import TYPE_CHECKING, Optional, Dict, Any
+
+if TYPE_CHECKING:
+    from tracegate.dlp import RedactionEngine
 
 from fastapi import FastAPI, Request, HTTPException, Response
 from fastapi.responses import StreamingResponse
@@ -148,7 +153,7 @@ async def sse_endpoint(request: Request):
                             
         except Exception as e:
             logger.error(f"SSE proxy error: {e}")
-            yield f"event: error\ndata: Proxy connection lost\n\n"
+            yield "event: error\ndata: Proxy connection lost\n\n"
 
     return StreamingResponse(sse_generator(), media_type="text/event-stream")
 

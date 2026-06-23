@@ -29,9 +29,9 @@ def init_project(args):
     tracebox_dir.mkdir(exist_ok=True)
 
     # Create ledger
-    ledger = Ledger()
+    Ledger()
     print(f"  ✅ TraceBox initialized in {os.getcwd()}")
-    print(f"     Ledger: .tracebox/ledger.db")
+    print("     Ledger: .tracebox/ledger.db")
 
     # Auto-install hooks
     try:
@@ -70,7 +70,7 @@ def open_dashboard(args):
         return 1
 
     # Show session list
-    print(f"Recent sessions:")
+    print("Recent sessions:")
     for s in sessions:
         trust = s.get("trust_score", 0)
         trust_icon = "🟢" if trust >= 80 else "🟡" if trust >= 50 else "🔴"
@@ -95,8 +95,8 @@ def open_dashboard(args):
             ui = TimelineUI(latest['id'], ledger)
             print(f"\nStarting dashboard at http://{args.host}:{args.port}")
             ui.serve_dashboard(host=args.host, port=args.port)
-        except ImportError as e:
-            print(f"Web dashboard requires: pip install fastapi uvicorn")
+        except ImportError:
+            print("Web dashboard requires: pip install fastapi uvicorn")
             return 1
 
     return 0
@@ -132,12 +132,12 @@ def rollback_cmd(args):
         print(f"    {s.get('type', '?')}: {s.get('path', '?')}")
 
     if warnings:
-        print(f"  ⚠️  Warnings:")
+        print("  ⚠️  Warnings:")
         for w in warnings:
             print(f"    - {w}")
 
     if irreversible:
-        print(f"  🔴 Irreversible:")
+        print("  🔴 Irreversible:")
         for i in irreversible:
             print(f"    - {i}")
 
@@ -146,7 +146,7 @@ def rollback_cmd(args):
         return 0
 
     # Execute
-    confirm = input(f"\nApply rollback? [y/N] ")
+    confirm = input("\nApply rollback? [y/N] ")
     if confirm.lower() != "y":
         print("Cancelled.")
         return 1
@@ -254,7 +254,7 @@ def serve_cmd(args):
     )
     orch.start_session()
 
-    print(f"MCP server running on stdio")
+    print("MCP server running on stdio")
     print(f"Session: {orch.session_id}")
     print(f"Policy: {args.policy or 'safe-default'}")
     print("Configure your agent's MCP server to connect to this process")
@@ -273,7 +273,7 @@ def doctor_cmd(args):
 
     # Check ledger
     try:
-        ledger = Ledger()
+        Ledger()
         checks.append(("Ledger DB", "✅"))
     except Exception:
         checks.append(("Ledger DB", "❌"))
@@ -315,7 +315,7 @@ def main():
     sub = parser.add_subparsers(dest="cmd", help="Commands")
 
     # init
-    init_p = sub.add_parser("init", help="Initialize TraceBox in current project")
+    sub.add_parser("init", help="Initialize TraceBox in current project")
 
     # run
     run_p = sub.add_parser("run", help="Run agent through TraceBox")
@@ -376,7 +376,7 @@ def main():
     serve_p.add_argument("--policy", default="safe-default", choices=["safe-default", "strict", "permissive"], help="Policy preset")
 
     # doctor
-    doctor_p = sub.add_parser("doctor", help="Check system health")
+    sub.add_parser("doctor", help="Check system health")
 
     args = parser.parse_args()
 

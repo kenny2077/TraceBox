@@ -166,7 +166,7 @@ def _install_hermes(config_path: Path) -> bool:
         # Don't overwrite existing user customization
         if skill_md.exists():
             print(f"  [hermes] TraceBox skill already exists at {skill_md}")
-            print(f"  [hermes] TraceBox MCP tool registered")
+            print("  [hermes] TraceBox MCP tool registered")
             return True
 
         skill_content = """---
@@ -219,7 +219,7 @@ custom_rules: []
 """
         skill_md.write_text(skill_content)
         print(f"  ✅ [hermes] TraceBox skill installed at {skill_md}")
-        print(f"  [hermes] To enable: restart Hermes, then use `tracebox` commands")
+        print("  [hermes] To enable: restart Hermes, then use `tracebox` commands")
         return True
 
     except Exception as e:
@@ -233,7 +233,7 @@ def _uninstall_hermes(config_path: Path) -> bool:
         skill_dir = Path.home() / ".hermes" / "skills" / "tracebox"
         if skill_dir.exists():
             shutil.rmtree(skill_dir)
-            print(f"  ✅ [hermes] TraceBox skill removed")
+            print("  ✅ [hermes] TraceBox skill removed")
         return True
     except Exception as e:
         print(f"  ❌ [hermes] Uninstall failed: {e}")

@@ -44,9 +44,11 @@ tracebox = "tracebox.cli:main"
 where = ["packages"]
 
 [tool.ruff]
-ignore = ["E402", "F401"]
 line-length = 120
 target-version = "py310"
+
+[tool.ruff.lint]
+ignore = ["E402", "F401"]
 
 [build-system]
 requires = ["setuptools>=68.0"]

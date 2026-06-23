@@ -321,14 +321,14 @@ class RollbackEngine:
     def generate_report(self, plan: Dict, results: Dict) -> str:
         """Generate rollback report."""
         report_lines = [
-            f"# TraceBox Rollback Report",
-            f"",
+            "# TraceBox Rollback Report",
+            "",
             f"**Session:** {self.session_id}",
             f"**Generated:** {datetime.now().isoformat()}",
             f"**Repository:** {self.repo_path}",
-            f"",
-            f"## Plan",
-            f"",
+            "",
+            "## Plan",
+            "",
         ]
 
         for step in plan.get("steps", []):

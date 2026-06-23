@@ -32,7 +32,10 @@ class ApprovalMemory:
     """Caches user approvals for repeated tool calls."""
 
     def __init__(self, db_path: str = ".tracebox/approvals.db"):
-        import sqlite3, hashlib, json, time
+        import sqlite3
+        import hashlib
+        import json
+        import time
         self._sqlite3 = sqlite3
         self._hashlib = hashlib
         self._json = json
@@ -434,7 +437,7 @@ def run_agent_command(
 
     if proxy_mode:
         # Launch MCP server as sidecar
-        mcp_script = str(Path(__file__).parent.parent / "policy" / "mcp_server.py")
+        str(Path(__file__).parent.parent / "policy" / "mcp_server.py")
         env["TRACEBOX_MCP_MODE"] = "1"
         # The MCP server runs inline with the orchestrator
         # Developer sets agent's MCP config to use this server
@@ -451,7 +454,7 @@ def run_agent_command(
         # Watch process + poll for file changes + check watcher events
         while process.poll() is None:
             # Detect file changes
-            changes = orch.detect_and_emit_changes()
+            orch.detect_and_emit_changes()
             # Check watcher events
             watcher_events = watcher.get_events()
             if watcher_events and orch.ledger:
@@ -463,7 +466,7 @@ def run_agent_command(
         # Final change detection
         time.sleep(0.5)  # Allow filesystem to settle
         watcher.stop()
-        changes = orch.detect_and_emit_changes()
+        orch.detect_and_emit_changes()
 
         # Detect test runs in tool calls
         test_evidence = orch._detect_test_runs()
@@ -480,7 +483,7 @@ def run_agent_command(
         if test_evidence:
             print(f"🧪 Tests run: {test_evidence}")
         else:
-            print(f"🧪 No tests detected — recommended if code was modified")
+            print("🧪 No tests detected — recommended if code was modified")
 
         return process.returncode
 
