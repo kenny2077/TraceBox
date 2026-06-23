@@ -1,6 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100">
   <rect width="400" height="100" fill="#0a0a0a" rx="8"/>
-  <text x="30" y="55" font-family="SF Mono, monospace" font-size="32" font-weight="bold" fill="#ffffff">Trace</text>
-  <text x="130" y="55" font-family="SF Mono, monospace" font-size="32" font-weight="bold" fill="#00d4aa">Box</text>
-  <text x="40" y="78" font-family="SF Mono, monospace" font-size="12" fill="#666666">local black-box recorder for AI coding agents</text>
+  <text x="200" y="55" font-family="SF Mono, monospace" font-size="32" font-weight="bold" text-anchor="middle" fill="#ffffff">Trace<tspan fill="#00d4aa">Box</tspan></text>
+  <text x="200" y="78" font-family="SF Mono, monospace" font-size="12" fill="#666666" text-anchor="middle">local black-box recorder for AI coding agents</text>
 </svg>
