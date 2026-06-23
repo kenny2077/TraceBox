@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/kenny2077/tracebox/main/docs/logo-dark.svg">
-    <img alt="TraceBox" src="https://raw.githubusercontent.com/kenny2077/tracebox/main/docs/logo-dark.svg" width="420">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/kenny2077/TraceBox/main/docs/logo-dark.svg">
+    <img alt="TraceBox" src="https://raw.githubusercontent.com/kenny2077/TraceBox/main/docs/logo-dark.svg" width="420">
   </picture>
 </p>
 
@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://pypi.org/project/tracebox/"><img src="https://img.shields.io/pypi/v/tracebox?color=blue" alt="PyPI version"></a>
-  <a href="https://github.com/kenny2077/tracebox/actions"><img src="https://img.shields.io/github/actions/workflow/status/kenny2077/tracebox/ci.yml?branch=main" alt="CI status"></a>
+  <a href="https://github.com/kenny2077/TraceBox/actions"><img src="https://img.shields.io/github/actions/workflow/status/kenny2077/TraceBox/ci.yml?branch=main" alt="CI status"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue" alt="Python versions"></a>
 </p>
@@ -235,8 +235,8 @@ TraceBox is honest about what it cannot do:
 ## Development
 
 ```bash
-git clone https://github.com/kenny2077/tracebox.git
-cd tracebox
+git clone https://github.com/kenny2077/TraceBox.git
+cd TraceBox
 pip install -e ".[dev]"
 pytest tests/unit/ tests/e2e/
 ```

@@ -32,10 +32,10 @@ dashboard = ["fastapi>=0.100", "uvicorn>=0.23"]
 dev = ["pytest>=7", "ruff>=0.1"]
 
 [project.urls]
-Homepage = "https://github.com/kenny2077/tracebox"
-Repository = "https://github.com/kenny2077/tracebox"
-Documentation = "https://github.com/kenny2077/tracebox/tree/main/docs"
-"Bug Tracker" = "https://github.com/kenny2077/tracebox/issues"
+Homepage = "https://github.com/kenny2077/TraceBox"
+Repository = "https://github.com/kenny2077/TraceBox"
+Documentation = "https://github.com/kenny2077/TraceBox/tree/main/docs"
+"Bug Tracker" = "https://github.com/kenny2077/TraceBox/issues"
 
 [project.scripts]
 tracebox = "tracebox.cli:main"

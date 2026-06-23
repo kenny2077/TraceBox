@@ -3,8 +3,8 @@
 ## Development Setup
 
 ```bash
-git clone https://github.com/kenny2077/tracebox.git
-cd tracebox
+git clone https://github.com/kenny2077/TraceBox.git
+cd TraceBox
 pip install -e ".[dev]"
 ```
 
