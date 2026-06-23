@@ -1,23 +1,17 @@
 #!/usr/bin/env python3
-"""TraceBox CLI entry point."""
-
+"""TraceBox CLI entry point — works from both source and pip install."""
 import sys
-import os
 from pathlib import Path
 
-# Resolve package paths relative to this file
-PKG_ROOT = Path(__file__).parent.parent.parent.resolve()
-sys.path.insert(0, str(PKG_ROOT))
-sys.path.insert(0, str(PKG_ROOT / "packages" / "ledger"))
-sys.path.insert(0, str(PKG_ROOT / "packages" / "recorder"))
-sys.path.insert(0, str(PKG_ROOT / "packages" / "policy"))
-sys.path.insert(0, str(PKG_ROOT / "packages" / "rollback"))
-sys.path.insert(0, str(PKG_ROOT / "packages" / "report"))
-sys.path.insert(0, str(PKG_ROOT / "packages" / "replay"))
-sys.path.insert(0, str(PKG_ROOT / "packages" / "core"))
+# When running from source, add the packages/ directory to sys.path
+# so sibling-package imports work. When installed via pip, all packages
+# are already in site-packages/ and no path manipulation is needed.
+_pkg_dir = Path(__file__).parent.resolve()  # packages/tracebox/
+_packages_dir = _pkg_dir.parent  # packages/
+if str(_packages_dir) not in sys.path:
+    sys.path.insert(0, str(_packages_dir))
 
-# Import the real CLI
-from apps.cli.tracebox import main
+from tracebox.main import main
 
 if __name__ == "__main__":
     sys.exit(main())

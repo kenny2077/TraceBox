@@ -2,6 +2,10 @@
 """
 TraceBox Unified CLI
 Main entry point for all TraceBox operations.
+Version: 1.0.0
+
+This module uses clean sibling-package imports for pip-installed mode.
+When running from source, the wrapper in cli.py handles path setup.
 """
 
 import argparse
@@ -11,18 +15,12 @@ import subprocess
 import sys
 from pathlib import Path
 
-# Add packages to path
-BASE = str(Path(__file__).parent.parent.resolve())
-for pkg in ["packages/ledger", "packages/recorder", "packages/policy",
-            "packages/policy/src", "packages/rollback", "packages/report",
-            "packages/replay", "packages/core"]:
-    sys.path.insert(0, os.path.join(BASE, pkg))
-
-from ledger import Ledger
-from recorder import FileRecorder
-from policy_engine import PolicyEngine
-from rollback import RollbackEngine
-from report import ReportGenerator
+# Clean imports — works when installed via pip (all packages in site-packages)
+from ledger.ledger import Ledger
+from recorder.recorder import FileRecorder
+from policy.policy_engine import PolicyEngine
+from rollback.rollback import RollbackEngine
+from report.report import ReportGenerator
 
 
 def init_project(args):
@@ -37,7 +35,7 @@ def init_project(args):
 
     # Auto-install hooks
     try:
-        from orchestrator import install_agent_hooks
+        from core.orchestrator import install_agent_hooks
         install_agent_hooks()
     except ImportError:
         pass
@@ -48,7 +46,7 @@ def init_project(args):
 def run_session(args):
     """Run agent through TraceBox."""
     try:
-        from orchestrator import run_agent_command
+        from core.orchestrator import run_agent_command
         result = run_agent_command(
             command=args.command,
             repo_path=os.getcwd(),
@@ -82,7 +80,7 @@ def open_dashboard(args):
     latest = sessions[0]
     print(f"\nTimeline for {latest['id']}:")
     try:
-        from timeline import TimelineUI
+        from replay.timeline import TimelineUI
         ui = TimelineUI(latest['id'], ledger)
         print(ui.render_cli())
     except ImportError:
@@ -93,7 +91,7 @@ def open_dashboard(args):
     # Offer web dashboard
     if args.web:
         try:
-            from timeline import TimelineUI
+            from replay.timeline import TimelineUI
             ui = TimelineUI(latest['id'], ledger)
             print(f"\nStarting dashboard at http://{args.host}:{args.port}")
             ui.serve_dashboard(host=args.host, port=args.port)
@@ -108,7 +106,7 @@ def timeline_cmd(args):
     """Show session timeline."""
     ledger = Ledger(args.ledger_db)
     try:
-        from timeline import TimelineUI
+        from replay.timeline import TimelineUI
         ui = TimelineUI(args.session_id, ledger)
         print(ui.render_cli(args.filter_type, args.filter_risk))
     except ImportError:
@@ -170,7 +168,7 @@ def export_cmd(args):
 
 def pr_comment_cmd(args):
     """Generate PR comment for a session."""
-    from pr_comment import PRCommentGenerator
+    from report.pr_comment import PRCommentGenerator
     ledger = Ledger(args.ledger_db)
     gen = PRCommentGenerator(args.session_id, ledger)
     if args.clipboard:
@@ -208,10 +206,10 @@ def policy_cmd(args):
 def install_cmd(args):
     """Install TraceBox hooks for AI coding agents."""
     try:
-        from installer import install_all
+        from policy.src.tracegate.installer import install_all
     except ImportError:
         try:
-            from tracegate.installer import install_all
+            from policy.src.tracegate.installer import install_all
         except ImportError:
             print("Error: installer module not found")
             return 1
@@ -225,10 +223,10 @@ def install_cmd(args):
 def uninstall_cmd(args):
     """Remove TraceBox hooks."""
     try:
-        from installer import uninstall_all
+        from policy.src.tracegate.installer import uninstall_all
     except ImportError:
         try:
-            from tracegate.installer import uninstall_all
+            from policy.src.tracegate.installer import uninstall_all
         except ImportError:
             print("Error: installer module not found")
             return 1
@@ -240,13 +238,13 @@ def uninstall_cmd(args):
 def serve_cmd(args):
     """Run TraceBox MCP server for tool call interception."""
     try:
-        from mcp_server import run_proxy_main
+        from policy.mcp_server import run_proxy_main
     except ImportError:
         print("Error: mcp_server module not found")
         return 1
 
     import asyncio
-    from orchestrator import SessionOrchestrator
+    from core.orchestrator import SessionOrchestrator
 
     repo = args.repo or os.getcwd()
     orch = SessionOrchestrator(
@@ -308,7 +306,7 @@ def doctor_cmd(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="TraceBox - Local black-box recorder for AI coding agents",
+        description="TraceBox — Local black-box recorder for AI coding agents",
         prog="tracebox",
     )
     parser.add_argument("--ledger-db", default=".tracebox/ledger.db", help="Ledger database path")

@@ -8,100 +8,81 @@
 <h3 align="center">Local black-box recorder for AI coding agents</h3>
 
 <p align="center">
-  See what your agent changed, what it risked, what it touched, and how to undo it.
-  <br>
-  <a href="#quick-start"><strong>Quick Start »</strong></a>
-  <a href="#commands"><strong>Commands »</strong></a>
-  <a href="docs/4-architecture.md"><strong>Architecture »</strong></a>
+  <strong>See what your agent changed, what it risked, and how to undo it — all on your machine.</strong>
+  <br><br>
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#features">Features</a> ·
+  <a href="#commands">Commands</a> ·
+  <a href="docs/4-architecture.md">Architecture</a> ·
+  <a href="CHANGELOG.md">Changelog</a>
 </p>
 
 <p align="center">
   <a href="https://pypi.org/project/tracebox/"><img src="https://img.shields.io/pypi/v/tracebox" alt="PyPI"></a>
   <a href="https://github.com/kenny2077/tracebox/actions"><img src="https://img.shields.io/github/actions/workflow/status/kenny2077/tracebox/ci.yml" alt="CI"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License"></a>
-  <a href="https://github.com/kenny2077/tracebox"><img src="https://img.shields.io/github/stars/kenny2077/tracebox" alt="Stars"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License MIT"></a>
+  <a href="https://github.com/kenny2077/tracebox"><img src="https://img.shields.io/badge/version-1.0.0-333" alt="v1.0.0"></a>
 </p>
 
----
+<hr>
 
-AI coding agents (Claude Code, Codex, Cursor, Gemini CLI) can change your files, run commands, read secrets, and call external APIs. When something breaks, you need answers fast.
+## Why TraceBox?
 
-TraceBox records every agent session into a local SQLite ledger and gives you **timeline**, **risk analysis**, **rollback**, and **exportable reports** — with no cloud dependencies, no API keys, and no setup beyond a single CLI command.
+AI coding agents — Claude Code, Codex, Cursor, Hermes — are powerful. They also modify your files, run shell commands, read sensitive configs, and make network calls. When something goes wrong, you need answers, not guesswork.
+
+**TraceBox** is a local-first black-box flight recorder. It sits between your agent and your filesystem, recording every tool call, file change, policy decision, and network destination into a SQLite ledger. No cloud. No API keys. No telemetry. Just a `pip install` and a single command.
 
 ## Quick Start
 
 ```bash
 pip install tracebox
-cd ~/projects/my-app
-tracebox init
-tracebox run -- claude -p "refactor the auth module"
-tracebox open
+cd your-project
+tracebox init                            # one-time setup
+tracebox run -- claude -p "add auth"    # record a session
+tracebox open                            # see the timeline
 ```
 
-That's it. After `tracebox open`, you see every tool call, file change, policy decision, and risk level — plus a one-command rollback.
-
-## The 60-Second Demo
-
-```bash
-$ tracebox run -- claude -p "add rate limiting"
-
-▶️  Running: claude -p "add rate limiting"
-🟢 Session started: sess_abc123
-   Policy: safe-default
-
-⚠️  HIGH RISK: execute_command -> deny
-   (Destructive command blocked by policy: rm -rf /tmp)
-🌐 Network: 1 critical destination detected (stripe.com)
-
-🏁 Session ended: sess_abc123
-   Changes: 3 files modified
-   Trust Score: 73/100
-📄 Report: .tracebox/reports/sess_abc123_report.md
-
-$ tracebox open
-
-Timeline for sess_abc123:
-[1]  file_read        | src/auth/service.ts
-[2]  impact_analysis  | 🔴 HIGH: 6 callers, 2 tests
-[3]  file_change      | modified: src/auth/service.ts
-[4]  tool_call        | execute_command: git diff
-[5]  tool_call        | ⚠️ npm install express-rate-limit (package change)
-[6]  file_change      | modified: package.json
-[7]  tool_call        | 🛡️ DENIED: rm -rf /tmp (critical)
-
-$ tracebox rollback sess_abc123 --dry-run
-Rollback plan:
-  - Reverse patch: src/auth/service.ts ✅
-  - Reverse patch: package.json ⚠️ (package change detected)
-  Rollback: tracebox rollback sess_abc123
-```
+That's it. Three commands and you have a complete audit trail of what your agent did.
 
 ## Features
 
-| Feature | Description |
-|---------|-------------|
-| **📋 Session Timeline** | Every tool call, file edit, and policy decision in chronological order |
-| **🛡️ Policy Engine** | Block destructive commands, sensitive file reads, and risky operations |
-| **🔒 DLP Redaction** | Secrets, API keys, and tokens are automatically redacted from logs |
-| **🌐 Network Detection** | URLs, database connections, and API endpoints are flagged automatically |
-| **📊 Impact Analysis** | RippleGraph tells you what callers and tests are affected before each edit |
-| **↩️ Rollback** | Reverse patches, git restore, and file deletion for undoing agent changes |
-| **📄 PR Comments** | GitHub-flavored Markdown summaries for code review |
-| **📈 Trust Score** | 0-100 score per session based on risks, blocks, and changes |
-| **🔌 Agent Hooks** | Install MCP proxy for Claude Code, Codex, and Cursor interception |
-| **📡 OTel Export** | Standard GenAI observability spans for Langfuse, Jaeger, Aspire |
+| Category | Capability |
+|----------|-----------|
+| **Session Recording** | Every tool call, file change, and policy decision in chronological order |
+| **Policy Engine** | Block destructive commands, sensitive reads, and risky operations with 3 built-in presets |
+| **DLP & Redaction** | Automatic detection and redaction of secrets, tokens, and API keys in logs |
+| **Network Monitoring** | Flags URLs, database connections, and API endpoints automatically |
+| **Impact Analysis** | Code dependency graph shows what callers and tests are affected per edit |
+| **One-Click Rollback** | Reverse patches, git restore, and file deletion for undoing agent changes |
+| **Trust Scoring** | Per-session 0–100 score based on risks blocked, changes made, and sensitivity |
+| **PR Comment Generator** | GitHub-flavored Markdown summaries ready for code review |
+| **Agent Hooks** | One-click MCP proxy install for Claude, Codex, Cursor, and Hermes |
+| **OTel Export** | Standard GenAI observability spans for Langfuse, Jaeger, and Aspire |
+| **Timeline Dashboard** | CLI and web UI (`tracebox open --web`) for exploring sessions |
+| **Local & Offline** | SQLite ledger on disk. No cloud dependency. No telemetry. |
+
+## Supported Agents
+
+| Agent | Integration | Status |
+|-------|-------------|--------|
+| Claude Desktop / Code | MCP server injection | `tracebox install --agent claude` |
+| Codex CLI (OpenAI) | MCP server injection | `tracebox install --agent codex` |
+| Cursor IDE | MCP server injection | `tracebox install --agent cursor` |
+| Hermes Agent | Skill installation | `tracebox install --agent hermes` |
+| Any MCP-compatible agent | Manual config | `tracebox serve` |
 
 ## Commands
 
 ```bash
 tracebox init              Initialize TraceBox in current project
 tracebox run -- <agent>    Run agent with recording and policy enforcement
-tracebox open              Show recent sessions with timeline
-tracebox timeline <id>     Full session event timeline
-tracebox rollback <id>     Rollback plan (--dry-run to preview)
-tracebox export <id>       Export report (markdown/html/json)
+tracebox open              Show recent sessions with timeline [--web for UI]
+tracebox timeline <id>     Full session event timeline with filtering
+tracebox rollback <id>     Generate and execute rollback plan (--dry-run to preview)
+tracebox export <id>       Export report (markdown | html | json)
 tracebox pr-comment <id>   Generate GitHub-flavored PR comment
-tracebox install           Install agent hooks (Claude, Codex, Cursor)
+tracebox install           Install agent hooks (--agent claude|codex|cursor|hermes)
+tracebox uninstall         Remove agent hooks
 tracebox serve             Run MCP server for tool call interception
 tracebox policy list       Show available policy presets
 tracebox doctor            Check system health and dependencies
@@ -109,13 +90,15 @@ tracebox doctor            Check system health and dependencies
 
 ## Policy Presets
 
-| Preset | Default | Use Case |
-|--------|---------|----------|
-| `safe-default` | Ask on unknown, deny destructive | Most developers |
-| `strict` | Deny everything except git/read | CI / production | 
-| `permissive` | Allow everything, just log | Evaluation only |
+TraceBox ships with three presets that balance safety and productivity:
 
-Customize per project with `.tracebox/policy.yaml`:
+| Preset | Behavior | Best For |
+|--------|----------|----------|
+| `safe-default` | Ask on unknown, deny destructive, rate-limit reads | Most developers |
+| `strict` | Deny everything except git/read-only ops | CI, production, security audits |
+| `permissive` | Allow everything, log only | Evaluation, demos, low-risk projects |
+
+Override per project with `.tracebox/policy.yaml`:
 
 ```yaml
 preset: safe-default
@@ -132,8 +115,8 @@ custom_rules:
 ```
 ┌──────────────┐    ┌────────────────┐    ┌──────────────┐
 │ AI Agent     │───▶│ TraceBox MCP   │───▶│ Tool Executor│
-│ (Claude/     │    │ Server         │    │ (MCP/Shell)  │
-│  Codex/etc.) │◀───│ (policy eval)  │◀───│              │
+│ (Claude /    │    │ Server         │    │ (MCP / Shell)│
+│  Codex etc.) │◀───│ (policy eval)  │◀───│              │
 └──────────────┘    └───────┬────────┘    └──────────────┘
                             │
                      ┌──────▼──────┐
@@ -147,33 +130,37 @@ custom_rules:
 
 Data never leaves your machine. No cloud, no API keys, no telemetry.
 
-## Comparison
+## How It Compares
 
-| Product | Focus | TraceBox Advantage |
-|---------|-------|--------------------|
-| Langfuse / AgentOps | LLM app tracing | We trace local coding-agent effects on repos |
+| Tool | Scope | TraceBox Differentiator |
+|------|-------|------------------------|
+| Langfuse / AgentOps | LLM app tracing | We trace local coding-agent file-system effects |
 | mcp-firewall / Pipelock | MCP network security | We combine security with repo impact + rollback |
-| AgentSight | System-level eBPF tracing | We provide developer workflow + semantic code risk + undo |
-| Cursor / Claude logs | Vendor-specific agent history | We are cross-agent, local, and exportable |
-| Git diff | File changes only | We add intent, tool, risk, and timeline context |
+| AgentSight | System-level eBPF | We provide developer workflow + semantic code risk |
+| Cursor / Claude logs | Single agent | We're cross-agent, local, and exportable |
+| `git diff` | File changes only | We add intent, tool, risk, and timeline context |
 
 ## Limitations
 
 TraceBox is honest about what it cannot do:
-- **RippleGraph impact analysis** requires [Bun](https://bun.sh) for TypeScript projects
-- **Rollback** cannot reverse network requests, database commands, or npm install scripts
-- **Secrets** already loaded into model context are irretrievable (only redacted from logs)
-- **Approval prompts** require `/dev/tty` (macOS/Linux)
+
+- **Network effects**: Cannot roll back API calls, database writes, or deployed artifacts
+- **Model memory**: Secrets already in the model's context window are irrecoverable
+- **Package install scripts**: `npm install` and similar may have irreversible side effects
+- **Impact analysis (RippleGraph)**: Experimental — requires Bun and TypeScript projects
+- **Approval prompts**: Require a TTY (macOS/Linux terminal)
 
 ## Development
 
 ```bash
 git clone https://github.com/kenny2077/tracebox.git
 cd tracebox
-pip install -e .
-pytest tests/e2e/
+pip install -e ".[dev]"
+pytest tests/unit/ tests/e2e/
 ```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
 ## License
 
-MIT
+MIT © TraceBox

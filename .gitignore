@@ -22,9 +22,10 @@ venv/
 .env/
 
 # Node.js (RippleGraph) — build artifacts and deps
-node_modules
+node_modules/
 packages/graph/node_modules/
 packages/graph/dist/
+packages/graph/bun.lock
 packages/graph/.npmrc
 packages/graph/package-lock.json
 

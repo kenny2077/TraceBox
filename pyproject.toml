@@ -1,20 +1,20 @@
 [project]
 name = "tracebox"
-version = "0.1.0"
-description = "Local black-box recorder for AI coding agents. See what your agent changed, what it risked, and how to undo it."
+version = "1.0.0"
+description = "TraceBox — Local black-box recorder for AI coding agents. See what your agent changed, what it risked, and how to undo it."
 readme = "README.md"
 requires-python = ">=3.10"
-license = {text = "MIT"}
+license = "MIT"
 authors = [{name = "Kenny"}]
 keywords = ["mcp", "security", "ai-agent", "trace", "rollback", "observability", "coding-agent"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Security",
     "Topic :: Software Development",
     "Topic :: Software Development :: Debuggers",
@@ -32,17 +32,16 @@ dashboard = ["fastapi>=0.100", "uvicorn>=0.23"]
 dev = ["pytest>=7", "ruff>=0.1"]
 
 [project.urls]
-Homepage = "https://github.com/kenny/tracebox"
-Repository = "https://github.com/kenny/tracebox"
-Documentation = "https://github.com/kenny/tracebox/tree/main/docs"
-"Bug Tracker" = "https://github.com/kenny/tracebox/issues"
+Homepage = "https://github.com/kenny2077/tracebox"
+Repository = "https://github.com/kenny2077/tracebox"
+Documentation = "https://github.com/kenny2077/tracebox/tree/main/docs"
+"Bug Tracker" = "https://github.com/kenny2077/tracebox/issues"
 
 [project.scripts]
 tracebox = "tracebox.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["packages"]
-include = ["tracebox*", "tracegate*"]
 
 [tool.ruff]
 ignore = ["E402", "F401"]

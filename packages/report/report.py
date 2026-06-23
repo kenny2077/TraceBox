@@ -213,7 +213,7 @@ class ReportGenerator:
             "impact_events": impact_events,
             "secret_events": secret_events,
             "generated_at": datetime.now().isoformat(),
-            "tb_version": "0.1.0",
+            "tb_version": "1.0.0",
         }
         return json.dumps(report, indent=2, default=str)
 

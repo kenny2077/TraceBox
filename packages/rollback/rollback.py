@@ -36,6 +36,33 @@ class RollbackEngine:
             raise RuntimeError(f"git {' '.join(args)} failed: {result.stderr}")
         return result.stdout.strip()
 
+    def _validate_repo_path(self, relative_path: str) -> Optional[Path]:
+        """
+        Validate a file path is within the repository. Resolves symlinks to
+        prevent symlink-based path traversal attacks.
+
+        Returns the resolved absolute Path if it's safely within repo, None otherwise.
+        """
+        # Build the full path anchored to the repo
+        full_path = self.repo_path / relative_path
+
+        # Resolve symlinks and normalize to catch traversal tricks
+        try:
+            resolved = full_path.resolve()
+        except (OSError, RuntimeError):
+            # Path resolution failed (e.g., circular symlinks)
+            return None
+
+        # Only allow the resolved absolute path if it's inside repo_path
+        repo_str = str(self.repo_path)
+        resolved_str = str(resolved)
+
+        # Must start with repo_path AND not be just the repo dir itself
+        if resolved_str.startswith(repo_str) and resolved_str != repo_str:
+            return resolved
+
+        return None
+
     def generate_plan(self, dry_run: bool = False) -> Dict:
         """Generate rollback plan from file_events."""
         if not self.ledger:
@@ -70,9 +97,8 @@ class RollbackEngine:
 
         # 1. Reverse patches for modified files
         for path in modified_files:
-            # Skip files outside the repo
-            full_path = Path(path) if os.path.isabs(path) else (self.repo_path / path)
-            if not str(full_path).startswith(str(self.repo_path)):
+            validated = self._validate_repo_path(path)
+            if validated is None:
                 plan["warnings"].append(f"Skipping file outside repo: {path}")
                 continue
 
@@ -90,7 +116,8 @@ class RollbackEngine:
                     text=True,
                 )
                 if result.stdout:
-                    patch_path = self.report_dir / f"{self.session_id}_{path.replace('/', '_')}.patch"
+                    safe_filename = path.replace('/', '_').replace('..', '_')
+                    patch_path = self.report_dir / f"{self.session_id}_{safe_filename}.patch"
                     patch_path.write_text(result.stdout)
                     plan["steps"].append({
                         "type": "reverse_patch",
@@ -105,8 +132,8 @@ class RollbackEngine:
 
         # 2. Delete created files
         for path in created_files:
-            full_path = Path(path) if os.path.isabs(path) else (self.repo_path / path)
-            if not str(full_path).startswith(str(self.repo_path)):
+            validated = self._validate_repo_path(path)
+            if validated is None:
                 plan["warnings"].append(f"Skipping file outside repo: {path}")
                 continue
             plan["steps"].append({
@@ -118,8 +145,8 @@ class RollbackEngine:
 
         # 3. Restore deleted files from snapshot or git
         for path in deleted_files:
-            full_path = Path(path) if os.path.isabs(path) else (self.repo_path / path)
-            if not str(full_path).startswith(str(self.repo_path)):
+            validated = self._validate_repo_path(path)
+            if validated is None:
                 plan["warnings"].append(f"Skipping file outside repo: {path}")
                 continue
 
@@ -178,7 +205,7 @@ class RollbackEngine:
         return plan
 
     def execute_plan(self, plan: Dict, dry_run: bool = True) -> Dict:
-        """Execute rollback plan."""
+        """Execute rollback plan with re-validation of all paths before destructive ops."""
         results = {
             "dry_run": dry_run,
             "executed": [],
@@ -195,6 +222,18 @@ class RollbackEngine:
                 if step["type"] == "reverse_patch":
                     # Apply reverse patch
                     patch_path = Path(step["patch"])
+
+                    # Validate patch is inside the report directory
+                    try:
+                        patch_resolved = patch_path.resolve()
+                        report_resolved = self.report_dir.resolve()
+                        if not str(patch_resolved).startswith(str(report_resolved)):
+                            results["failed"].append(f"Patch outside expected dir: {step['patch']}")
+                            continue
+                    except (OSError, RuntimeError):
+                        results["failed"].append(f"Invalid patch path: {step['patch']}")
+                        continue
+
                     if patch_path.exists():
                         result = subprocess.run(
                             ["git", "apply", "-R", str(patch_path)],
@@ -210,34 +249,66 @@ class RollbackEngine:
                         results["failed"].append(f"Patch not found: {step['patch']}")
 
                 elif step["type"] == "delete_created":
-                    path = self.repo_path / step["path"]
-                    if path.exists():
-                        if path.is_file():
-                            path.unlink()
+                    # Re-validate at execution time
+                    validated = self._validate_repo_path(step["path"])
+                    if validated is None:
+                        results["failed"].append(f"Path validation failed at execution: {step['path']}")
+                        continue
+
+                    # Extra check: never follow symlinks for deletion
+                    if validated.is_symlink():
+                        results["skipped"].append(f"Skipping symlink: {step['path']}")
+                        continue
+
+                    if validated.exists():
+                        if validated.is_file():
+                            validated.unlink()
+                        elif validated.is_dir() and not validated.is_symlink():
+                            # Additional safety: check children don't escape via symlinks
+                            shutil.rmtree(str(validated))
                         else:
-                            shutil.rmtree(path)
+                            results["skipped"].append(f"Cannot delete non-regular path: {step['path']}")
+                            continue
                         results["executed"].append(f"Deleted created file: {step['path']}")
 
                 elif step["type"] == "restore_deleted":
+                    # Re-validate target path
+                    validated = self._validate_repo_path(step["path"])
+                    if validated is None:
+                        results["failed"].append(f"Path validation failed at execution: {step['path']}")
+                        continue
+
+                    if validated.is_symlink():
+                        results["skipped"].append(f"Skipping symlink target: {step['path']}")
+                        continue
+
                     snapshot = Path(step["snapshot"])
-                    target = self.repo_path / step["path"]
                     if snapshot.exists():
-                        target.parent.mkdir(parents=True, exist_ok=True)
-                        shutil.copy2(snapshot, target)
+                        validated.parent.mkdir(parents=True, exist_ok=True)
+                        shutil.copy2(snapshot, str(validated))
                         results["executed"].append(f"Restored deleted file: {step['path']}")
                     else:
                         results["failed"].append(f"Snapshot not found: {step['snapshot']}")
 
                 elif step["type"] == "git_restore_deleted":
-                    target = self.repo_path / step["path"]
-                    target.parent.mkdir(parents=True, exist_ok=True)
+                    # Re-validate target path
+                    validated = self._validate_repo_path(step["path"])
+                    if validated is None:
+                        results["failed"].append(f"Path validation failed at execution: {step['path']}")
+                        continue
+
+                    if validated.is_symlink():
+                        results["skipped"].append(f"Skipping symlink target: {step['path']}")
+                        continue
+
+                    validated.parent.mkdir(parents=True, exist_ok=True)
                     result = subprocess.run(
                         ["git", "show", f"HEAD:{step['path']}"],
                         cwd=self.repo_path,
                         capture_output=True, text=True,
                     )
                     if result.returncode == 0:
-                        target.write_text(result.stdout)
+                        validated.write_text(result.stdout)
                         results["executed"].append(f"Restored deleted file from git: {step['path']}")
                     else:
                         results["failed"].append(f"Could not restore from git: {step['path']}")

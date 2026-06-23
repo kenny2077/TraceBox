@@ -145,13 +145,13 @@ class OTelExporter:
             "resource": {
                 "attributes": [
                     {"key": "service.name", "value": {"stringValue": "tracebox"}},
-                    {"key": "service.version", "value": {"stringValue": "0.1.0"}},
+                    {"key": "service.version", "value": {"stringValue": "1.0.0"}},
                 ]
             },
             "scopeSpans": [{
                 "scope": {
                     "name": "tracebox.agent",
-                    "version": "0.1.0",
+                    "version": "1.0.0",
                 },
                 "spans": [
                     {
