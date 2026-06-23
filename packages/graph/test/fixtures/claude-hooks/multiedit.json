@@ -1,0 +1,12 @@
+{
+  "hook_event_name": "PreToolUse",
+  "tool_name": "MultiEdit",
+  "tool_input": {
+    "file_path": "src/config/settings.ts",
+    "edits": [
+      { "old_string": "const PORT = 3000", "new_string": "const PORT = 8080" }
+    ]
+  },
+  "cwd": "/Users/alice/projects/my-app",
+  "session_id": "abc-789-def"
+}

@@ -1,0 +1,36 @@
+{
+  "version": "0.1.0",
+  "projectRoot": "/Users/kenny/Desktop/UMN/Projects/RippleGraph/test/fixtures/simple-project",
+  "projectName": "simple-project",
+  "languages": [
+    "typescript",
+    "javascript"
+  ],
+  "packageManager": "npm",
+  "testFramework": "vitest",
+  "tsconfigPaths": {
+    "@utils/*": [
+      "src/utils/*"
+    ]
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    "dist/",
+    "build/",
+    ".git/",
+    ".ripplegraph/"
+  ],
+  "sourceExtensions": [
+    ".ts",
+    ".tsx",
+    ".js",
+    ".jsx",
+    ".mjs",
+    ".cjs"
+  ],
+  "indexedAt": "2026-06-11T05:12:32.757Z",
+  "gitCommit": "02a9236110920562cea45ffe6f01e159ea5c7be3",
+  "totalFiles": 7,
+  "totalSymbols": 12,
+  "totalEdges": 11
+}

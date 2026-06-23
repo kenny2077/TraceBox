@@ -1,0 +1,9 @@
+{
+  "hook_event_name": "PreToolUse",
+  "tool_name": "apply_patch",
+  "tool_input": {
+    "file_path": "src/direct-path.ts",
+    "command": "some patch content"
+  },
+  "cwd": "/repo"
+}

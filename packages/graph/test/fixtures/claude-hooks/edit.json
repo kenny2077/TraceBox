@@ -1,0 +1,11 @@
+{
+  "hook_event_name": "PreToolUse",
+  "tool_name": "Edit",
+  "tool_input": {
+    "file_path": "src/utils/helpers.ts",
+    "old_string": "export function helper()",
+    "new_string": "export function helper(flag: boolean)"
+  },
+  "cwd": "/Users/alice/projects/my-app",
+  "session_id": "abc-456-def"
+}

@@ -1,0 +1,8 @@
+{
+  "hook_event_name": "PreToolUse",
+  "tool_name": "apply_patch",
+  "tool_input": {
+    "command": "*** Begin Patch\n*** Add File: src/api/new-endpoint.ts\n@@ -0,0 +1,10 @@\n+export function handler() {\n+  return { ok: true };\n+}\n*** End Patch\n*** Begin Patch\n*** Delete File: src/api/old-endpoint.ts\n@@ -1,10 +0,0 @@\n-export function oldHandler() {\n-  return { ok: false };\n-}\n*** End Patch"
+  },
+  "cwd": "/repo"
+}

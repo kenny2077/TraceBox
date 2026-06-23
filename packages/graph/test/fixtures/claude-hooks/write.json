@@ -1,0 +1,11 @@
+{
+  "hook_event_name": "PreToolUse",
+  "tool_name": "Write",
+  "tool_input": {
+    "file_path": "/Users/alice/projects/my-app/src/auth/service.ts",
+    "content": "export function login() {\n  return true;\n}\n"
+  },
+  "cwd": "/Users/alice/projects/my-app",
+  "session_id": "abc-123-def",
+  "transcript_path": "/Users/alice/.claude/transcripts/abc-123-def.json"
+}

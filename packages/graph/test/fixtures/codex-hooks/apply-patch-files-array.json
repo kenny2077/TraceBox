@@ -1,0 +1,8 @@
+{
+  "hook_event_name": "PreToolUse",
+  "tool_name": "apply_patch",
+  "tool_input": {
+    "files": ["src/a.ts", "src/b.ts", "src/c.ts"]
+  },
+  "cwd": "/repo"
+}

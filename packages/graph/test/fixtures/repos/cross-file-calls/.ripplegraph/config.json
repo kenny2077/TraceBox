@@ -1,0 +1,32 @@
+{
+  "version": "0.1.0",
+  "projectRoot": "/Users/kenny/Desktop/UMN/Projects/RippleGraph/test/fixtures/repos/cross-file-calls",
+  "projectName": "cross-file-calls",
+  "languages": [
+    "typescript",
+    "javascript"
+  ],
+  "packageManager": "npm",
+  "testFramework": null,
+  "tsconfigPaths": {},
+  "ignorePatterns": [
+    "node_modules/",
+    "dist/",
+    "build/",
+    ".git/",
+    ".ripplegraph/"
+  ],
+  "sourceExtensions": [
+    ".ts",
+    ".tsx",
+    ".js",
+    ".jsx",
+    ".mjs",
+    ".cjs"
+  ],
+  "indexedAt": "2026-06-10T16:22:13.759Z",
+  "gitCommit": "7e5a369f6ac82b84b51fb6d8c86153c57f07e724",
+  "totalFiles": 3,
+  "totalSymbols": 3,
+  "totalEdges": 1
+}

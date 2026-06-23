@@ -1,0 +1,8 @@
+{
+  "hook_event_name": "PreToolUse",
+  "tool_name": "apply_patch",
+  "tool_input": {
+    "command": "*** Begin Patch\n*** Update File: src/auth/service.ts\n@@ -10,6 +10,8 @@\n export function login() {\n+  console.log('auth');\n   return true;\n }\n*** End Patch"
+  },
+  "cwd": "/repo"
+}

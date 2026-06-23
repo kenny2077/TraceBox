@@ -1,0 +1,9 @@
+{
+  "hook_event_name": "PreToolUse",
+  "tool_name": "Bash",
+  "tool_input": {
+    "command": "npm run build"
+  },
+  "cwd": "/Users/alice/projects/my-app",
+  "session_id": "abc-bash-1"
+}

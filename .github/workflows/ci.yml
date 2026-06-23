@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -e .
+      - name: Run E2E tests
+        run: |
+          python3 tests/e2e/test_all.py
+      - name: Run smoke tests
+        run: |
+          python3 -c "
+          import sys
+          sys.path.insert(0, 'packages/ledger')
+          sys.path.insert(0, 'packages/policy')
+          sys.path.insert(0, 'packages/core')
+          from ledger import Ledger
+          from policy_engine import PolicyEngine
+          from orchestrator import SessionOrchestrator, ApprovalMemory
+          print('All imports OK')
+          "
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install lint tools
+        run: pip install ruff
+      - name: Lint
+        run: ruff check packages/ --ignore=E402,F401

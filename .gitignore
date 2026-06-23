@@ -1,0 +1,52 @@
+# TraceBox runtime data — NEVER COMMIT
+.tracebox/
+
+# Database files — contain tool call logs, approval memory, sessions
+*.db
+*.db-shm
+*.db-wal
+
+# Python caches — build artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+build/
+dist/
+*.whl
+*.tar.gz
+
+# Virtual environments
+.venv/
+venv/
+.env/
+
+# Node.js (RippleGraph) — build artifacts and deps
+node_modules
+packages/graph/node_modules/
+packages/graph/dist/
+packages/graph/.npmrc
+packages/graph/package-lock.json
+
+# Python build artifacts
+dist/
+*.egg-info/
+
+# References — cloned repos, not part of this product
+references/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs and reports (generated)
+*.log
+.tracebox/
+
+# Agent tool call records
+agent-intent.log

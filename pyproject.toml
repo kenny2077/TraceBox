@@ -1,0 +1,54 @@
+[project]
+name = "tracebox"
+version = "0.1.0"
+description = "Local black-box recorder for AI coding agents. See what your agent changed, what it risked, and how to undo it."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Kenny"}]
+keywords = ["mcp", "security", "ai-agent", "trace", "rollback", "observability", "coding-agent"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Debuggers",
+]
+dependencies = [
+    "pydantic>=2.0.0",
+    "pyyaml>=6.0.0",
+    "rich>=13.0.0",
+    "typer>=0.12.0",
+    "watchdog>=3.0.0",
+]
+
+[project.optional-dependencies]
+dashboard = ["fastapi>=0.100", "uvicorn>=0.23"]
+dev = ["pytest>=7", "ruff>=0.1"]
+
+[project.urls]
+Homepage = "https://github.com/kenny/tracebox"
+Repository = "https://github.com/kenny/tracebox"
+Documentation = "https://github.com/kenny/tracebox/tree/main/docs"
+"Bug Tracker" = "https://github.com/kenny/tracebox/issues"
+
+[project.scripts]
+tracebox = "tracebox.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["packages"]
+include = ["tracebox*", "tracegate*"]
+
+[tool.ruff]
+ignore = ["E402", "F401"]
+line-length = 120
+target-version = "py310"
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
